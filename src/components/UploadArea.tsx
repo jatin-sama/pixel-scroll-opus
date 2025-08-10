@@ -62,11 +62,11 @@ const UploadArea = ({ onFilesUploaded }: UploadAreaProps) => {
           </motion.div>
           
           <h3 className="text-xl font-pixel text-primary mb-2 uppercase tracking-wider">
-            Upload Your Image
+            Upload Manga Panels
           </h3>
           
           <p className="text-muted-foreground mb-6 font-mono">
-            Upload any image to transform into manga style panels
+            Drag & drop your comic panels here or click to select
           </p>
           
           <label className="pixel-button inline-flex items-center gap-2 px-6 py-3 cursor-pointer">
