@@ -7,6 +7,7 @@ interface Panel {
   id: string;
   file: File;
   url: string;
+  mangaUrl?: string;
 }
 
 interface PreviewProps {
@@ -196,7 +197,7 @@ const Preview = ({ panels }: PreviewProps) => {
             className="max-w-full max-h-full flex items-center justify-center"
           >
             <motion.img
-              src={panels[currentPanel]?.url}
+              src={panels[currentPanel]?.mangaUrl || panels[currentPanel]?.url}
               alt={`Panel ${currentPanel + 1}`}
               className="max-w-full max-h-80 object-contain border-2 border-primary/50 shadow-2xl"
               style={{ imageRendering: 'pixelated' }}
@@ -214,6 +215,11 @@ const Preview = ({ panels }: PreviewProps) => {
                 repeatType: "reverse"
               } : {}}
             />
+            {panels[currentPanel]?.mangaUrl && (
+              <div className="absolute top-2 right-2 px-2 py-1 bg-primary/20 backdrop-blur-sm rounded text-xs font-mono text-primary">
+                MANGA PANEL
+              </div>
+            )}
           </motion.div>
         </AnimatePresence>
 
@@ -252,12 +258,17 @@ const Preview = ({ panels }: PreviewProps) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <img
-              src={panel.url}
-              alt={`Thumbnail ${index + 1}`}
-              className="w-full h-full object-cover"
-              style={{ imageRendering: 'pixelated' }}
-            />
+            <div className="relative w-full h-full">
+              <img
+                src={panel.mangaUrl || panel.url}
+                alt={`Thumbnail ${index + 1}`}
+                className="w-full h-full object-cover"
+                style={{ imageRendering: 'pixelated' }}
+              />
+              {panel.mangaUrl && (
+                <div className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
+              )}
+            </div>
           </motion.button>
         ))}
       </div>

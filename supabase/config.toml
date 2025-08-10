@@ -1,1 +1,4 @@
 project_id = "kbasamokfdjefvzmdxzv"
+
+[functions.process-manga-panel]
+verify_jwt = false

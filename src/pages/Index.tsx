@@ -4,15 +4,20 @@ import Header from "@/components/Header";
 import UploadArea from "@/components/UploadArea";
 import PanelEditor from "@/components/PanelEditor";
 import Preview from "@/components/Preview";
+import SceneInput from "@/components/SceneInput";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface Panel {
   id: string;
   file: File;
   url: string;
+  mangaUrl?: string;
 }
 
 const Index = () => {
   const [panels, setPanels] = useState<Panel[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFilesUploaded = (files: File[]) => {
     const newPanels: Panel[] = files.map(file => ({
@@ -36,6 +41,57 @@ const Index = () => {
       }
       return prev.filter(p => p.id !== id);
     });
+  };
+
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(',')[1]); // Remove data:image/jpeg;base64, prefix
+      };
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const handleProcessScene = async (scene: string) => {
+    if (panels.length === 0) {
+      toast.error("Please upload an image first");
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      // Process the first panel for now
+      const panel = panels[0];
+      const imageBase64 = await fileToBase64(panel.file);
+
+      const { data, error } = await supabase.functions.invoke('process-manga-panel', {
+        body: {
+          imageBase64,
+          scene
+        }
+      });
+
+      if (error) {
+        console.error('Error processing manga panel:', error);
+        toast.error('Failed to generate manga panel');
+        return;
+      }
+
+      // Update the panel with the generated manga URL
+      setPanels(prev => prev.map(p => 
+        p.id === panel.id ? { ...p, mangaUrl: data.mangaPanelUrl } : p
+      ));
+
+      toast.success('Manga panel generated successfully!');
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to generate manga panel');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -78,6 +134,15 @@ const Index = () => {
           {/* Upload Section */}
           <section>
             <UploadArea onFilesUploaded={handleFilesUploaded} />
+          </section>
+
+          {/* Scene Input Section */}
+          <section className="pixel-panel p-6 bg-dark-surface/30 backdrop-blur-sm">
+            <SceneInput 
+              onProcess={handleProcessScene}
+              isProcessing={isProcessing}
+              disabled={panels.length === 0}
+            />
           </section>
 
           {/* Main Content Grid */}
