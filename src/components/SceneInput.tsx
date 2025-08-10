@@ -30,12 +30,16 @@ const SceneInput = ({ onProcess, isProcessing, disabled }: SceneInputProps) => {
         Scene Description
       </h3>
       
+      <p className="text-muted-foreground font-mono text-sm mb-6 text-center">
+        Describe the manga scene you want to create. Be specific about characters, actions, and emotions.
+      </p>
+      
       <div className="space-y-4">
         <Textarea
-          placeholder="Describe the scene you want to create... (e.g., 'A hero facing a powerful enemy in a dramatic battle')"
+          placeholder="Example: 'A determined warrior stands on a cliff facing a massive dragon. The wind blows their cape dramatically as they raise their sword, ready for battle. Show intense emotion in their eyes.'"
           value={scene}
           onChange={(e) => setScene(e.target.value)}
-          className="min-h-32 font-mono text-sm pixel-panel"
+          className="min-h-32 font-mono text-sm pixel-panel resize-none"
           disabled={disabled}
         />
         
@@ -55,9 +59,11 @@ const SceneInput = ({ onProcess, isProcessing, disabled }: SceneInputProps) => {
       </div>
       
       {disabled && (
-        <p className="text-muted-foreground text-sm font-mono text-center">
-          Upload an image first to generate manga panels
-        </p>
+        <div className="text-center py-4 pixel-panel bg-muted/20 backdrop-blur-sm">
+          <p className="text-muted-foreground text-sm font-mono">
+            👆 Upload an image first, then describe your manga scene above
+          </p>
+        </div>
       )}
     </motion.div>
   );

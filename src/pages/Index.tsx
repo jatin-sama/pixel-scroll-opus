@@ -130,7 +130,42 @@ const Index = () => {
       <div className="relative z-10">
         <Header />
         
-        <main className="container mx-auto px-4 py-8 space-y-12">
+        <main className="container mx-auto px-4 py-8 space-y-8">
+          {/* Instructions */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="text-center py-6"
+          >
+            <h2 className="text-2xl font-pixel text-primary mb-4 uppercase tracking-wider">
+              How It Works
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <div className="pixel-panel p-4 bg-dark-surface/20 backdrop-blur-sm">
+                <div className="text-3xl font-pixel text-primary mb-2">01</div>
+                <h3 className="font-pixel text-lg mb-2">Upload Image</h3>
+                <p className="text-sm text-muted-foreground font-mono">
+                  Upload your base image or artwork
+                </p>
+              </div>
+              <div className="pixel-panel p-4 bg-dark-surface/20 backdrop-blur-sm">
+                <div className="text-3xl font-pixel text-primary mb-2">02</div>
+                <h3 className="font-pixel text-lg mb-2">Describe Scene</h3>
+                <p className="text-sm text-muted-foreground font-mono">
+                  Write your scene description and story
+                </p>
+              </div>
+              <div className="pixel-panel p-4 bg-dark-surface/20 backdrop-blur-sm">
+                <div className="text-3xl font-pixel text-primary mb-2">03</div>
+                <h3 className="font-pixel text-lg mb-2">Generate Panel</h3>
+                <p className="text-sm text-muted-foreground font-mono">
+                  AI transforms it into manga style
+                </p>
+              </div>
+            </div>
+          </motion.section>
+
           {/* Upload Section */}
           <section>
             <UploadArea onFilesUploaded={handleFilesUploaded} />
